@@ -4,7 +4,10 @@ import pandas as pd
 nan_threshold = 0.1
 
 def info(df):
-    print("NaN values:")
+    print("Dataset elements:", df.values.size)
+    print("Dataset cols:", df.columns.size)
+
+    print("\nNaN values:")
     cols = df.columns
     for col in cols:
         nan = df[col].isna().sum()
@@ -13,13 +16,15 @@ def info(df):
         if percentage > nan_threshold :
             print(col, tot, nan, percentage)
 
-    count_duplicates(df)
+    # remove duplicates
+    df = remove_duplicates(df)
 
 
-def count_duplicates(df):
-    print("\nDuplicated rows:")
-    print(df[df.duplicated()].size)
-
+def remove_duplicates(df):
+    old_size = df.values.size
+    df = df.drop_duplicates()
+    print("\nRemoved duplicates:", old_size - df.values.size)
+    return df
 
 if __name__ == '__main__':
     df = pd.read_csv("datasets/Big_Cities_Health_Data_Inventory.csv")
